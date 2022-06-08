@@ -1,0 +1,14 @@
+#!/bin/bash
+#SBATCH --job-name=matrix_multiplication
+#SBATCH --output=mm_output.txt
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=28
+#SBATCH --time=20
+#SBATCH --reservation=ipdc-2018
+#SBATCH --account=ipdc-2018
+
+g++ -o matrix_multiplication matrix_multiplication.cpp -fopenmp #compiling
+
+./matrix_multiplication 1 5000 1  # serial version
+./matrix_multiplication 2 5000 1  # cache efficient version
+./matrix_multiplication 3 5000 8  # parallel version

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<meta name="robots" content="index, follow">
+		<meta name="keywords" content="">
+		<meta name="description" content="">
+
+		<link rel="stylesheet" href="/css/w3.css">
+		<link rel="stylesheet" href="/css/theme-ttu.css">
+		<link rel="stylesheet" href="/fontawesome-free-5.15.4-web/css/all.css">
+		<link rel="stylesheet" href="/css/main.css">
+		<link rel="stylesheet" href="/css/test.css">
+		<script src="/javascript/w3.js"></script>
+	</head>
+    
+	<body id="home" class="w3-theme-l4">
+		<!-- Navigation Bar -->
+		<header id="page_header" class="w3-card-2 w3-theme w3-padding-16" style="z-index:1;">
+			<div class="w3-bar w3-auto">
+				<nav class="w3-right w3-large">
+					<a href="/"                          class="w3-bar-item w3-button w3-mobile w3-border-theme w3-hover-theme">Home</a>
+					<a href="/Workshops/Workshops.html"  class="w3-bar-item w3-button w3-mobile w3-border-theme w3-hover-theme">Workshops</a>
+					<a href="/Resources/Modules.html" class=" w3-bar-item w3-button w3-mobile w3-border-theme w3-hover-theme  ">Modules</a>
+					<a href="/Resources/Resources.html" class="w3-bar-item w3-button w3-mobile w3-border-theme w3-hover-theme ">Resources</a>
+					<a href="/People.html"               class="w3-bar-item w3-button w3-mobile w3-border-theme w3-hover-theme">Personel</a>
+				</nav>
+			</div>
+		</header>
+
+		<main id="page_content" class="w3-auto w3-white" style="z-index:0;">
+			<!-- Intro paragraph-->
+			<div class="w3-panel w3-row">
+				<div class="w3-container w3-rest">
+					<div class="w3-section w3-card-4 w3-theme-l5">
+						<header class="w3-container w3-theme">
+							<h2>Tool Installation</h2>
+						</header>
+						
+						<div class="w3-container w3-row">
+						  <p> This page contains instructions for the installation of tools used in the IPDC workshop</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- Installation Instructions -->
+			<div class="w3s-panel w3-row">
+				<div class="w3-container w3-rest">
+					<div class="w3-section w3-card-4 w3-theme-l5">
+						<header class="w3-container w3-theme">
+							<h2>Installation Instructions</h2>
+						</header>
+						
+						<!-- C++ install instructions -->
+						<div class="w3-container">
+							<h2> C++ and OpenMP </h2>
+							
+							<button type="button" class="collapsible">Windows (Command line)</button>
+							<div class="content">
+								  <p>Download and extract GCC from <a href="" download>LINK NEEDED</a></p>
+								  <p>Open a command prompt and navigate to the extracted folder</p>
+								  <p>Run "mingvars.bat"</p>
+							</div>
+							
+							<button type="button" class="collapsible">Windows (CodeBlocks)</button>
+							<div class="content">
+								  <p>Download and extract GCC from <a href="" download>LINK NEEDED</a></p>
+								  <p> Start Code Blocks, to to Settings->Compiler</p>
+								  <p> In the Settings Window, go to Compiler Settings</p>
+								  <p> Under "Other compiler options" add "-fopenmp" into the textbox</p>
+								  <p> Under "Linker settings" add "-lgomp" to "Other linker options" textbox.</p>
+								  <p> Under "Toolchain Executables" change the following variables</p>
+										<ul>
+											<li>"Compiler's installation directory" = &<path to extracted folder&> </li>
+											<li>"C compiler " = gcc.exe </li>
+											<li>"C++ compiler" = g++.exe</li>
+											<li>"Linker for dynamic libs" = g++.exe </li>					   
+										</ul>
+								   <p>If there are one or more existing projects, clean and rebuild the projects</p>		
+								   <p> Visual instructions can be found <a href="">here(link missing)</a></p>
+							</div>
+							
+							<button type="button" class="collapsible">Windows (Visual Studio)</button>
+							<div class="content">
+								  <p> Visual Studio 2015 or later recommended</p>
+								  </br>
+								  <p> For Visual Studio Version 2013 or eariler do the following steps first</p>
+									  <ul>
+										  <li>Go to Build menu top level</li>
+										  <li>Go to Project Contexts area Box</li>
+										  <li>Set Configuration = Debug</li>
+										  <li>Set Platform = Win32</li>
+									  </ul>
+								  <p>Open a new empty project</p>
+								  <p>Open the Solution Explorer, right click on new opened solution(++ sign)</p>
+								  <p>In the popup menu, go to Configuration Properties</p>
+								  <p>In the new window go to C/C++ -> Langauge</p>
+								  <p>click Open MP Support-> select yes from the drop box</p>
+							</div>
+
+							<button type="button" class="collapsible">Linux</button>
+							<div class="content">
+								  <p>g++ should already be on the command line</p>
+							</div>
+							
+							<button type="button" class="collapsible">MacOs</button>
+							<div class="content">
+								  <p>The default gcc compiler included in MacOs does not support openMP.
+								  In order to work around this a secondary compiler is required</p>
+								
+								  <p>Install homebrew using /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" </p>
+								  <p>Install gcc using /usr/local/bin/brew install gcc</p>
+								  <p>use g++-11 as the commpile command. </p>
+								  
+							</div>
+
+							</br>
+							</br>
+							<button type="button" class="collapsible">Test Installation</button>
+							<div class="content">
+								<p>Download openmp_confirm.cpp</p>
+							    <p>Compile the program</p>
+                                <ul>
+									<li> Windows or Linux: g++ -o openmp_confirm openmp_confirm.cpp</li>
+									<li> MacOx: g++11 -o openmp_confirm openmp_confirm.cpp</li>
+									<li> Visual Studio: Build Solution</li>
+								</ul>
+								<p>run "openmp_confirm" </p>
+								<p> Output should be the following:</p>
+								<ul>
+									<li> hi from thread 0</li>
+									<li> hi from thread 1</li>
+								</ul>
+							</div>
+						</div>
+					
+					    <!-- Java Install Instructions-->
+						<div class="w3-container">
+							<h2>Java Development Kit 11 (JDK 11) </h2>
+					    	<button type="button" class="collapsible">Windows</button>
+							<div class="content">
+								<p> Go to the <a href="https://adoptium.net/releases.html?variant=openjdk11"> Adoptium Java 11 </a> downloads page </p>
+								<p> Fill in the information for your computer architecture </p>
+								<p> Download the .msi </p>
+								<p> Run the .msi and enable "Set JAVA_HOME varible" in the install wizard</p>
+							</div>
+							
+							<button type="button" class="collapsible">MacOs</button>
+							<div class="content">
+								<p> Install homebrew (see C++ on MacOs section)</p>
+								<p> open a terminal and run "/usr/local/bin/brew install javall" </p>
+							</div>
+							
+							<button type="button" class="collapsible">Linux</button>
+							<div class="content">
+							   <p>Run "sudo apt-get install openjdk-11-jdk" in a terminal</p>
+							   <p>If you already have a different version of java installed.
+							      run "update-alternatives --config java" </p>
+							</div>
+					       </br>
+						   </br>
+						   <button type="button" class="collapsible">Confirm Installation</button>
+							<div class="content">
+								  <p>Verify installation with "javac -version"</p>
+							</div>
+						</div>
+						
+						
+						
+						<!-- Python 3 Install Instructions-->
+						<div class="w3-container">
+							<h2>Python 3</h2>
+							<button type="button" class="collapsible">Windows</button>
+							<div class="content">
+								<p> Download and install Python for your Os at https://www.python.org/downloads/ </p>
+								<p> Check "Add Python 3.9 to path" </p>
+							</div>
+							
+							<button type="button" class="collapsible">MacOs</button>
+							<div class="content">
+								<p> Should be installed by default (see Confirm Installation)</p>
+								<p> If not installed </p>
+								<ul>
+									<li> Download appropriate version at https://www.python.org/downloads </li>
+									<li> Install pip by runing "sudo apt-get install pip" in a command terminal</li>
+								</ul>
+							</div>
+							
+							<button type="button" class="collapsible">Linux</button>
+							<div class="content">
+								<p> Should be installed by default (see Confirm Installation)</p>
+								<p> If not installed </p>
+								<ul>
+									<li> Install by running "sudo apt-get install python3" </li>
+									<li> Install pip by runing "sudo apt-get install pip" in a command terminal</li>
+								</ul>
+							</div>
+							</br>
+							</br>
+							<button type="button" class="collapsible">Confirm Installation</button>
+							<div class="content">
+							    <p> Run "python --version" in a command terminal </p>
+							</div>
+						</div>	
+						
+						<!-- Pyjama Install Instructions-->
+						<div class="w3-container">
+							<h2>Pyjama </h2>
+							<p> Prerequisite: Java JDK 11</p>
+						
+							<button type="button" class="collapsible">Windows/MacOs/Linux Install</button>
+								<div class="content">
+									<p> Download and unzip Pyjama.zip </p>
+									<p> Navigate a command terminal to the extracted folder.</p>
+									<ul>
+									   <li> For Windows run: "set_pyjama.bat"</li>
+									   <li> For MacOs or Linux run: "source set_pyjama.sh"</li>
+									</ul>
+								</div>
+							</br>
+							</br>
+							<button type="button" class="collapsible">Confirm Installation</button>
+								<div class="content">	
+							       <p> Download and unzip PyjamaConfirm.java </p>
+								   <ul>
+										<li>If runing WINDOWS</li>
+										<li>Compile with java -jar "$pyjama" PyjamaConfirm.java</li>
+								        <li>Run with java -cp "$pyjama":. PyjamaConfirm</li>
+								   </ul>
+								   </br>
+								   <ul>
+								       <li> If running MacOs or Linux </li>
+									   <li>Compile with "java -jar %pyjama% PyjamaConfirm.java"</li>
+								       <li> Run with "java -cp %pyjama%;. PyjamaConfirm"</li>
+								   </ul>
+								   </br>
+								   <p> You should see the following lines output (order does not matter): </p>
+								   </br>
+								   <ul>
+								      <li> hi from thread 0</li>
+								      <li> hi from thread 1</li>
+								   </ul>
+								</div>
+						</div>
+							
+						<!-- OpenMpy Install Instructions-->
+						<div class="w3-container">
+							<h2>OpenMPy </h2>
+							<p> Prerequisite: Java JDK 11 and Python3</p>
+						
+							<button type="button" class="collapsible">Windows/MacOs/Linux</button>
+							<div class="content">
+								<p> Download and unzip OpenMPy.zip </p>
+								<p> Navigate to extracted folder and open command prompt</p>
+								<p> Run "pip install -r requirements.txt"</p>
+								<p> Run "setpath.bat" </p>
+							</div>
+							
+							<button type="button" class="collapsible">MacOs and Linux</button>
+							<div class="content">
+							    <p> Download and unzip OpenMPy.zip </p>
+								<p> Navigate to extracted folder and open terminal</p>
+								<p> Run "pip3 install -r requirements.txt"</p>
+								<p> Run "source setpath.sh" </p>
+							</div>
+							</br>
+							</br>
+							<button type="button" class="collapsible">Confirm Installation</button>
+							<div class="content">
+							  <p> Download and extract openmpy_confirm.pyjama</p>
+							  <p> Run "jython openmpy_confirm.py"</p>
+							  <p> You should see the following output (Order doesn't matter)</p>
+								<ul>
+								   <li> Hello from thread: 0</li>
+								   <li> Hello from thread: 1</li>
+								</ul>
+							</div>
+							
+							
+						</div>
+						</br>
+						</br>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<footer id="page_footer" class="w3-card-2 w3-center w3-theme w3-small" style="z-index:1;">
+			<p>&copy; 2022, Andrew Worley</p>
+			<p>
+			<a href="http://validator.w3.org/check/referer" target="_blank" referrerpolicy="unsafe-url">HTML</a>
+			<a href="http://jigsaw.w3.org/css-validator/check/referer" target="_blank" referrerpolicy="unsafe-url">CSS</a>
+			</p>
+		</footer>
+		
+		
+		<!-- collasble script from tutorial w3.schools 5-18-22-->
+		<script>
+		var coll = document.getElementsByClassName("collapsible");
+		var i;
+		for (i = 0; i < coll.length; i++) {
+		  coll[i].addEventListener("click", function() {
+					this.classList.toggle("active");
+					var content = this.nextElementSibling;
+					if (content.style.display === "block") {
+						content.style.display = "none";
+					} else {
+					content.style.display = "block";
+					}
+			});
+		}
+		</script>
+		
+	</body>
+</html>

@@ -1,0 +1,159 @@
+/** ************************************************************************
+*	 Author: Md Mosharaf Hossain
+*    Email:  mhossain44@students.tntech.edu
+*    Date:   16-Jul-2018
+***************************************************************************/
+
+#include <iostream>
+#include <string>
+#include "sys/time.h"
+#include "time.h"
+#include "omp.h"
+#include <cstdlib>
+#include <cstdio>
+
+using namespace std;
+
+#define A(i,j,col) A[j + col*i]
+#define B(i,j,col) B[j + col*i]
+#define C(i,j,col) C[j + col*i]
+
+void initialize_matrix(double* matrix, int row, int col){
+    for (int i = 0; i < row; i++ ){
+        for(int j = 0; j < col; j++){
+            matrix[j+ i*col] = (double)rand()/RAND_MAX;
+        }
+    }
+}
+
+void show_matrix(double *matrix, int row, int col){
+    for (int i = 0; i < row; i++ ){
+        for(int j = 0; j < col; j++){
+            cout<<matrix[j + i * col]<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+// Default Matrix Multiplication
+void default_matmul(double* A, double* B, double* C, int M, int N, int K){
+    double my_sum;
+    for(int i = 0; i < M; i++){
+        for(int j = 0; j < N; j++){
+            my_sum = 0;
+            for(int k = 0; k < K; k++){
+                my_sum += A(i, k, K) * B(k, j, N );  // No leveragin of locality
+            }
+            C(i, j, N) = my_sum;
+        }
+    }
+}
+
+void cache_efficient_matmul(double* A, double* B, double* C, int M, int N, int K){
+    for(int i = 0; i < M; i++){
+        for(int k = 0; k < K; k++){
+            double temp = A(i, k, K);  // Leverage Temporal_locality
+            for(int j = 0; j < N; j++){
+                C(i, j, N) += temp * B(k, j, N ); //Leveraging Spatial Locality of  B(k, j, N );
+            }
+        }
+    }
+}
+
+// Parallel Matrix Multiplication on default version
+void parallel_matmul(double* A, double* B, double* C, int M, int N, int K, int thread_count){
+
+    #pragma omp parallel num_threads(thread_count)
+    {
+        int my_rank= omp_get_thread_num();
+        int num_parts = M/thread_count;   //num_parts is individual parts of data that every processor will work with
+        int my_first_i = num_parts * my_rank;
+        int my_last_i;
+        if (my_rank == thread_count-1) my_last_i = M;
+        else my_last_i = my_first_i + num_parts;
+        double my_sum;
+        for(int i = my_first_i; i < my_last_i; i++){
+            for(int j = 0; j < N; j++){
+                my_sum = 0.0;
+                for(int k = 0; k < K; k++){
+                    my_sum += A(i, k, K) * B(k, j, N );
+                }
+                C(i, j, N) = my_sum;
+            }
+        }
+    }
+
+}
+
+int main(int argc, char* argv[])
+{
+    if(argc != 4){
+        cout<<"The program requires three argument to proceed."<<endl;
+        cout<<"First argument is method ID: 1 for serial, 3 for parallel and 2 for cache efficient version"<<endl;
+        cout<<"Second argument is the dimension of a square matrix."<<endl;
+        cout<<"Third argument is number of threads. Put 1 in case of serial or cache efficient version."<<endl;
+        return 0;
+    }
+
+    int method_id    = atoi(argv[1]);
+    int matrix_dim   = atoi(argv[2]);
+    int thread_count = atoi(argv[3]);
+
+    int M, K, N;
+    M = K = N = matrix_dim;
+
+
+    cout<<"Data Initialization Started.."<<endl;
+    double *A = new double[M*K];
+    double *B = new double[K*N];
+    double *C = new double[M*N]();
+    initialize_matrix(A, M, K);
+    initialize_matrix(B, K, N);
+    cout<<"Data Initialization Ended."<<endl;
+    FILE *fp = fopen("matrix_mult_log.txt", "a");
+
+    cout<<"Computation Started.."<<endl;
+    struct timeval start, finish;
+    if (method_id == 1) {
+        gettimeofday(&start, NULL);
+        default_matmul(A, B, C, M, N, K);
+        gettimeofday(&finish, NULL);
+        double duration = ((double)(finish.tv_sec-start.tv_sec)*1000000 + (double)(finish.tv_usec-start.tv_usec)) / 1000000;
+        cout<<"Computation Time (Serial) : "<<duration<<" Sec"<<endl;
+        fprintf(fp, "Computation Time (Serial) : %lf Sec\n", duration);
+    }
+    else if(method_id == 2){
+        gettimeofday(&start, NULL);
+        cache_efficient_matmul(A, B, C, M, N, K);
+        gettimeofday(&finish, NULL);
+        double duration = ((double)(finish.tv_sec-start.tv_sec)*1000000 + (double)(finish.tv_usec-start.tv_usec)) / 1000000;
+        cout<<"Computation Time (Cache Eff.) : "<<duration<<" Sec"<<endl;
+        fprintf(fp, "Computation Time (Cache Eff.) : %lf Sec\n", duration);
+    }
+    else if(method_id == 3){
+        gettimeofday(&start, NULL);
+        parallel_matmul(A, B, C, M, N, K, thread_count);
+        gettimeofday(&finish, NULL);
+        double duration = ((double)(finish.tv_sec-start.tv_sec)*1000000 + (double)(finish.tv_usec-start.tv_usec)) / 1000000;
+        cout<<"Number of Threads : "<< thread_count<<" Computation Time (Parallel) : "<<duration<<" Sec"<<endl;
+        fprintf(fp, "Number of Threads : %d Computation Time (Parallel) : %lf Sec\n", thread_count, duration);
+    }
+
+
+    fclose(fp);
+    /*
+    cout<<"--A--"<<endl;
+    show_matrix(A, M, K);
+    cout<<"--B--"<<endl;
+    show_matrix(B, K, N);
+    cout<<"--C-"<<endl;
+    show_matrix(C, M, N);
+    //*/
+
+    delete[] A;
+    delete[] B;
+    delete[] C;
+
+
+
+}
